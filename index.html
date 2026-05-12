@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawan Nath — BSc CSIT</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --accent: #7c6bff;
+    --accent2: #ff6b9d;
+    --text: #f0eeff;
+    --muted: #8884aa;
+    --border: rgba(124,107,255,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* glow blobs */
+  .blob1, .blob2 {
+    position: fixed; border-radius: 50%;
+    filter: blur(100px); pointer-events: none; z-index: 0;
+  }
+  .blob1 { width: 500px; height: 500px; background: rgba(124,107,255,0.08); top: -100px; right: -100px; }
+  .blob2 { width: 400px; height: 400px; background: rgba(255,107,157,0.06); bottom: 100px; left: -100px; }
+
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.9rem; font-weight: 400;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--text); }
+
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 3rem 4rem;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  .hero-content { max-width: 700px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,107,255,0.1);
+    border: 1px solid rgba(124,107,255,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.8rem; color: var(--accent);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); max-width: 500px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px; text-decoration: none;
+    font-weight: 500; font-size: 0.95rem;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px; text-decoration: none;
+    font-weight: 400; font-size: 0.95rem;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  .section-wrap {
+    max-width: 900px; margin: 0 auto;
+    padding: 5rem 3rem;
+  }
+
+  .section-label {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700; letter-spacing: -0.03em;
+    margin-bottom: 1rem; color: var(--text);
+  }
+
+  .section-intro { color: var(--muted); max-width: 500px; margin-bottom: 3rem; }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; align-items: start;
+  }
+
+  .about-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .about-card p { color: var(--muted); line-height: 1.8; }
+  .about-card p + p { margin-top: 1rem; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem; font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .skill-card:hover { border-color: rgba(124,107,255,0.4); transform: translateY(-3px); }
+
+  .skill-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+
+  .skill-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 600;
+    color: var(--text); margin-bottom: 0.4rem;
+  }
+
+  .skill-desc { font-size: 0.8rem; color: var(--muted); }
+
+  .skill-bar-wrap { margin-top: 0.75rem; height: 3px; background: rgba(255,255,255,0.06); border-radius: 3px; }
+  .skill-bar { height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; gap: 1.5rem; }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 1rem; align-items: start;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover { border-color: rgba(124,107,255,0.35); transform: translateY(-3px); }
+
+  .project-tag {
+    display: inline-block;
+    background: rgba(124,107,255,0.1);
+    border: 1px solid rgba(124,107,255,0.2);
+    color: var(--accent);
+    font-size: 0.7rem; font-weight: 500;
+    padding: 3px 10px; border-radius: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-tag.wip {
+    background: rgba(255,107,157,0.1);
+    border-color: rgba(255,107,157,0.2);
+    color: var(--accent2);
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--text); margin-bottom: 0.5rem;
+  }
+
+  .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  .project-tech { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .tech-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    font-size: 0.75rem; padding: 3px 10px; border-radius: 6px;
+  }
+
+  .project-arrow {
+    color: var(--muted); font-size: 1.2rem;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .project-card:hover .project-arrow { color: var(--accent); transform: translate(3px, -3px); }
+
+  /* CONTACT */
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .contact-card h2 { margin-bottom: 0.75rem; }
+  .contact-card p { color: var(--muted); margin-bottom: 2rem; }
+
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  .contact-link {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px; font-size: 0.9rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--text); }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { gap: 1.25rem; }
+    .hero, .section-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .project-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<nav>
+  <div class="nav-logo">pawan<span>.</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      Available for internships & collaborations
+    </div>
+    <h1>
+      Pawan Nath
+      <span class="line2">IT Student &amp; Developer</span>
+    </h1>
+    <p class="hero-sub">BSc CSIT student at Patan Multiple Campus, Nepal. Exploring software development, one line of code at a time.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View My Projects</a>
+      <a href="#contact" class="btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-label">Who I am</div>
+    <h2>About Me</h2>
+    <div class="about-grid">
+      <div class="about-card">
+        <p>Hi! I'm Pawan, a BSc CSIT student at Patan Multiple Campus, Kathmandu. I'm passionate about technology and currently building my foundation in programming, web development, and software engineering.</p>
+        <p>I believe in learning by doing — every project I take on, no matter how small, teaches me something new. I'm always looking to grow and connect with fellow developers.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-num">BSc</div>
+          <div class="stat-label">CSIT Programme</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">PMC</div>
+          <div class="stat-label">Patan Multiple Campus</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">NPL</div>
+          <div class="stat-label">Based in Nepal</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Curiosity level</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-label">What I know</div>
+    <h2>Skills</h2>
+    <p class="section-intro">A mix of technical foundations and tools I'm actively learning as part of my CSIT programme.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-name">Python</div>
+        <div class="skill-desc">Basics of programming, logic, and scripting</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:40%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">HTML & CSS</div>
+        <div class="skill-desc">Building and styling web pages from scratch</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:55%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🗄️</div>
+        <div class="skill-name">Database Basics</div>
+        <div class="skill-desc">SQL queries, tables, and relational databases</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:35%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🔧</div>
+        <div class="skill-name">Git & GitHub</div>
+        <div class="skill-desc">Version control and code collaboration</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:30%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">💻</div>
+        <div class="skill-name">C Programming</div>
+        <div class="skill-desc">Core programming concepts and logic building</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:45%"></div></div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🧠</div>
+        <div class="skill-name">Problem Solving</div>
+        <div class="skill-desc">Algorithms, logic, and computational thinking</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:50%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-label">What I've built</div>
+    <h2>Projects</h2>
+    <p class="section-intro">Small but real — every project here is a step forward in my learning journey.</p>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div>
+          <span class="project-tag">Completed</span>
+          <div class="project-title">Personal Portfolio Website</div>
+          <div class="project-desc">A responsive personal portfolio built from scratch using HTML and CSS. Designed to showcase my skills, projects, and background as a BSc CSIT student.</div>
+          <div class="project-tech">
+            <span class="tech-pill">HTML</span>
+            <span class="tech-pill">CSS</span>
+            <span class="tech-pill">Responsive Design</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <span class="project-tag wip">In Progress</span>
+          <div class="project-title">Student Result Management System</div>
+          <div class="project-desc">A simple database-backed system to store and retrieve student grades. Built as part of my database course to practice SQL and basic CRUD operations.</div>
+          <div class="project-tech">
+            <span class="tech-pill">Python</span>
+            <span class="tech-pill">SQL</span>
+            <span class="tech-pill">SQLite</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <span class="project-tag wip">In Progress</span>
+          <div class="project-title">Nepal Weather Dashboard</div>
+          <div class="project-desc">A beginner project to practice working with public APIs. Fetches and displays current weather data for major cities in Nepal using a free weather API.</div>
+          <div class="project-tech">
+            <span class="tech-pill">Python</span>
+            <span class="tech-pill">REST API</span>
+            <span class="tech-pill">JSON</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="contact-card">
+      <div class="section-label" style="margin-bottom:0.5rem">Say hello</div>
+      <h2>Let's Connect</h2>
+      <p>I'm always open to new opportunities, collaborations, or just a good tech conversation. Feel free to reach out!</p>
+      <div class="contact-links">
+        <a href="mailto:pawannath@email.com" class="contact-link">📧 Email Me</a>
+        <a href="https://github.com/pawannath" class="contact-link">🐙 GitHub</a>
+        <a href="https://linkedin.com/in/pawannath" class="contact-link">💼 LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with HTML &amp; CSS by Pawan Nath · Patan Multiple Campus, Nepal</p>
+</footer>
+
+</body>
+</html>
